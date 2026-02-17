@@ -1,50 +1,33 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# UA-CLI Constitution
+
+<!-- HTML Comment: Sync Impact Report -->
+<!-- Version: 1.0.0 (Initial Ratification) -->
+<!-- Added Principles: Speed, UX, Privacy, Maintainability, Resilience -->
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Speed is a Feature
+Commands **MUST** execute in milliseconds whenever possible. We prioritize aggressive caching strategy (Offline First) to ensure instant feedback, masking network latency. The user should never wait for a command that can be served from local cache.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. User Experience (UX) First
+We embrace "Unhinged Aesthetics" using modern TUI libraries (Bubbletea/Lipgloss). Interactions **MUST** be delightful, interactive, and visually polished. However, standard stdout/stderr predictability **MUST** be preserved for scripting compatibility (pipe-friendly when not in TTY).
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Privacy & Security
+Data is **Local-First**. Credentials **MUST** be stored securely using the OS native Keyring or encrypted cookies. We **MUST NOT** implement any third-party tracking or telemetry. User data never leaves their machine except to communicate with official UA servers.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Maintainability (Hexagonal)
+We strictly follow **Hexagonal Architecture (Ports & Adapters)** and the **Standard Go Project Layout**. Business logic (Domain) **MUST** be decoupled from infrastructure (HTTP, CLI, TUI). High test coverage is mandatory, especially for HTML parsers.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Resilience
+Scraping logic **MUST** be decoupled and resilient. Parsers should be robust against minor HTML structure changes. We acknowledge the risk of "Institutional Blocking" and mitigate it with respectful rate limiting and configurable User-Agents.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Feature Scope
+**Included**: Authentication (Keyring/Cookie), Schedule, Grades, Notices, Virtual Campus Download.
+**Excluded**: Full Offline Mode (write), Push Notifications (system), Advanced File Organization.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This Constitution supersedes all other technical decisions.
+Amendments require a Pull Request with a clear rationale and must not violate the core values of Privacy or Speed without overwhelming justification.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-02-17 | **Last Amended**: 2026-02-17

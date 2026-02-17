@@ -1,0 +1,30 @@
+# Binaries
+ua
+ua.exe
+*.exe
+*.dll
+*.so
+
+# Cache
+.ua-cli/
+cache/
+
+# Artifacts
+last_response.txt
+
+# Editor
+.vscode/
+.idea/
+
+# SpecKit
+.specify/memory/
+.specify/scripts/
+.specify/templates/
+# But keep constitution/specs if desired? Usually spec artifacts are committed.
+# The user might want to ignore the agent memory or large logs.
+# For now, let's keep specs committed as they are documentation.
+# Ignore temporary spec scripts outputs if any.
+
+# Go
+go.sum
+vendor/

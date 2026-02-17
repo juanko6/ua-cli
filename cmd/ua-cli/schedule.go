@@ -41,10 +41,14 @@ Use --json for raw output.`,
 			os.Exit(1)
 		}
 
-		// TODO: Load cookie from Keyring or Config
-		// For MVP, if no cookie, we might fail or prompt.
-		// Detailed auth logic is in a separate step, here we assume empty or configured.
-		cookieVal := "TODO_LOAD_COOKIE" 
+		// Load cookie from ~/.ua-cli/cookie.txt
+		cookiePath := fmt.Sprintf("%s/.ua-cli/cookie.txt", home)
+		cookieBytes, err := os.ReadFile(cookiePath)
+		if err != nil {
+             // For MVP, just warn and use empty, or fail.
+			fmt.Fprintf(os.Stderr, "Warning: Could not read cookie from %s: %v\n", cookiePath, err)
+		}
+		cookieVal := string(cookieBytes) 
 		cloudAdapter, err := uacloud.NewUACloudAdapter(cookieVal)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error initializing cloud adapter: %v\n", err)

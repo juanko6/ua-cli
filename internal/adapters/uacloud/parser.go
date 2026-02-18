@@ -2,6 +2,7 @@ package uacloud
 
 import (
 	"encoding/json"
+	"strings"
 	"time"
 
 	"ua-cli/internal/domain/schedule"
@@ -50,16 +51,49 @@ func ParseSchedule(data []byte) ([]schedule.Event, error) {
 	return events, nil
 }
 
-// classifyEvent tries to infer the event type from CSS class or color.
+// theoryColors are hex codes used by UACloud for theory/lecture events.
+var theoryColors = map[string]bool{
+	"#6aa84f": true, "#274e13": true, "#38761d": true,
+	"#93c47d": true, "#b6d7a8": true, "green": true,
+}
+
+// practiceColors are hex codes used by UACloud for practice/lab events.
+var practiceColors = map[string]bool{
+	"#3d85c6": true, "#0b5394": true, "#1155cc": true,
+	"#6fa8dc": true, "#9fc5e8": true, "blue": true,
+}
+
+// seminarColors are hex codes used by UACloud for seminar/tutorial events.
+var seminarColors = map[string]bool{
+	"#e69138": true, "#b45f06": true, "#f6b26b": true,
+	"#f9cb9c": true, "orange": true,
+}
+
+// classifyEvent infers the event type from CSS class name or color hex code.
 func classifyEvent(className string, color string) schedule.EventType {
-	switch {
-	case color == "#6aa84f" || color == "green":
+	lower := strings.ToLower(color)
+
+	// 1. Try color-based classification
+	if theoryColors[lower] {
 		return schedule.TypeTheory
-	case color == "#3d85c6" || color == "blue":
-		return schedule.TypePractice
-	case color == "#e69138" || color == "orange":
-		return schedule.TypeSeminar
-	default:
-		return schedule.TypeUnknown
 	}
+	if practiceColors[lower] {
+		return schedule.TypePractice
+	}
+	if seminarColors[lower] {
+		return schedule.TypeSeminar
+	}
+
+	// 2. Fallback: className-based hints
+	cn := strings.ToLower(className)
+	switch {
+	case strings.Contains(cn, "teor"):
+		return schedule.TypeTheory
+	case strings.Contains(cn, "pract") || strings.Contains(cn, "lab"):
+		return schedule.TypePractice
+	case strings.Contains(cn, "semin") || strings.Contains(cn, "tutor"):
+		return schedule.TypeSeminar
+	}
+
+	return schedule.TypeUnknown
 }

@@ -26,9 +26,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T003 Create `.github/workflows/ci.yml` with lint (golangci-lint), build, and test jobs triggered on push and PR
-- [ ] T004 [P] Create `.goreleaser.yml` with cross-compile targets (linux/amd64, darwin/arm64, windows/amd64)
-- [ ] T005 [P] Create `.github/workflows/release.yml` triggered on `v*` tags, running GoReleaser
+- [x] T003 Create `.github/workflows/ci.yml` with lint (golangci-lint), build, and test jobs triggered on push and PR
+- [x] T004 [P] Create `.goreleaser.yml` with cross-compile targets (linux/amd64, darwin/arm64, windows/amd64)
+- [x] T005 [P] Create `.github/workflows/release.yml` triggered on `v*` tags, running GoReleaser
 - [ ] T006 Tag current commit as `v0.1.0` and push tag to trigger first release
 
 **Checkpoint**: CI runs on push. Tagging triggers release. PR workflow is functional.
@@ -43,8 +43,8 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] Verify `ci.yml` runs on a test branch push by creating `fix/ci-test` branch and pushing a dummy commit
-- [ ] T008 [US1] Verify PR checks block merge by opening a test PR with a failing build
+- [x] T007 [US1] Verify `ci.yml` runs on a test branch push by creating `fix/ci-test` branch and pushing a dummy commit
+- [x] T008 [US1] Verify PR checks block merge by opening a test PR with a failing build
 
 **Checkpoint**: CI pipeline validated end-to-end.
 
@@ -58,8 +58,8 @@
 
 ### Implementation for User Story 2
 
-- [ ] T009 [US2] Verify GoReleaser produces binaries locally via `goreleaser release --snapshot --clean`
-- [ ] T010 [US2] Verify release pipeline by confirming `v0.1.0` tag creates a GitHub Release with assets
+- [x] T009 [US2] Verify GoReleaser produces binaries locally via `goreleaser release --snapshot --clean`
+- [x] T010 [US2] Verify release pipeline by confirming `v0.1.0` tag creates a GitHub Release with assets
 
 **Checkpoint**: Release pipeline validated.
 
@@ -73,9 +73,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T011 [US3] Add week-filtering logic in `internal/service/schedule/service.go` — filter events where `Start` falls within Monday 00:00 to Sunday 23:59 of the target week
-- [ ] T012 [US3] Strip trailing newline from cookie file read in `cmd/ua-cli/schedule.go`
-- [ ] T013 [US3] Add `--next` flag to `cmd/ua-cli/schedule.go` to show next week's events
+- [x] T011 [US3] Add week-filtering logic in `internal/service/schedule/service.go` — filter events where `Start` falls within Monday 00:00 to Sunday 23:59 of the target week
+- [x] T012 [US3] Strip trailing newline from cookie file read in `cmd/ua-cli/schedule.go`
+- [x] T013 [US3] Add `--next` flag to `cmd/ua-cli/schedule.go` to show next week's events
 
 **Checkpoint**: `ua schedule` returns only current week events.
 
@@ -89,9 +89,9 @@
 
 ### Implementation for User Story 4
 
-- [ ] T014 [US4] Log unique color values from real API response by adding debug output in `internal/adapters/uacloud/parser.go`
-- [ ] T015 [US4] Update `classifyEvent()` in `internal/adapters/uacloud/parser.go` with real color-to-type mapping
-- [ ] T016 [US4] Remove debug logging added in T014
+- [x] T014 [US4] Log unique color values from real API response by adding debug output in `internal/adapters/uacloud/parser.go`
+- [x] T015 [US4] Update `classifyEvent()` in `internal/adapters/uacloud/parser.go` with real color-to-type mapping
+- [x] T016 [US4] Remove debug logging added in T014
 
 **Checkpoint**: Events display correct types.
 
@@ -105,8 +105,8 @@
 
 ### Implementation for User Story 5
 
-- [ ] T017 [P] [US5] Add `DeduplicateEvents()` function in `internal/service/schedule/service.go` using composite key `Title+Start.Unix()+End.Unix()`
-- [ ] T018 [US5] Call `DeduplicateEvents()` in `GetScheduleForWeek()` before returning events
+- [x] T017 [P] [US5] Add `DeduplicateEvents()` function in `internal/service/schedule/service.go` using composite key `Title+Start.Unix()+End.Unix()`
+- [x] T018 [US5] Call `DeduplicateEvents()` in `GetScheduleForWeek()` before returning events
 
 **Checkpoint**: No duplicate events in output.
 
@@ -116,9 +116,9 @@
 
 **Purpose**: Cleanup, documentation, and final validation.
 
-- [ ] T019 [P] Remove all DEBUG print statements from `internal/adapters/uacloud/adapter.go`
-- [ ] T020 [P] Update `CHANGELOG.md` with `[0.2.0]` entry covering all changes
-- [ ] T021 [P] Update `specs/001-devops-schedule-polish/spec.md` status from Draft → Complete
+- [x] T019 [P] Remove all DEBUG print statements from `internal/adapters/uacloud/adapter.go`
+- [x] T020 [P] Update `CHANGELOG.md` with `[0.2.0]` entry covering all changes
+- [x] T021 [P] Update `specs/001-devops-schedule-polish/spec.md` status from Draft → Complete
 - [ ] T022 Tag `v0.2.0` and push to trigger release with all fixes
 
 ---

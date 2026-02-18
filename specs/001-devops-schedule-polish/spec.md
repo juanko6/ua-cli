@@ -2,7 +2,7 @@
 
 **Feature Branch**: `001-devops-schedule-polish`  
 **Created**: 2026-02-17  
-**Status**: Draft  
+**Status**: Complete  
 **Input**: User description: "Configurar infraestructura DevOps (GitHub Flow, SemVer, CI/CD con GitHub Actions + GoReleaser) y polish del módulo Schedule (filtro semanal, colores de eventos, deduplicación)"
 
 ## User Scenarios & Testing

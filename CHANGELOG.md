@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [0.2.0] - 2026-02-18
+
+### Added
+- CI pipeline (GitHub Actions): lint, build, test on push/PR.
+- Release pipeline: GoReleaser cross-compiles binaries on `v*` tags.
+- `.goreleaser.yml` for Linux/macOS/Windows builds.
+- `--next` / `--prev` flags for week navigation in `ua schedule`.
+
+### Fixed
+- Schedule now filters events to the current week only (was showing entire semester).
+- Event type classification improved with expanded color mapping + className fallback.
+- Duplicate events removed using title+start+end composite key deduplification.
+- Cookie file reading now trims trailing newline/whitespace.
+
+### Changed
+- Default branch renamed from `master` to `main`.
+
 ## [0.1.0] - 2026-02-17
 
 ### Added

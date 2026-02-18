@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
-    "golang.org/x/term"
+	"golang.org/x/term"
 
 	"ua-cli/internal/adapters/presenter"
 	"ua-cli/internal/adapters/repo"
@@ -48,7 +49,7 @@ Use --json for raw output.`,
              // For MVP, just warn and use empty, or fail.
 			fmt.Fprintf(os.Stderr, "Warning: Could not read cookie from %s: %v\n", cookiePath, err)
 		}
-		cookieVal := string(cookieBytes) 
+		cookieVal := strings.TrimSpace(string(cookieBytes))
 		cloudAdapter, err := uacloud.NewUACloudAdapter(cookieVal)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error initializing cloud adapter: %v\n", err)

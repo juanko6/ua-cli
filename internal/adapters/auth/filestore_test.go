@@ -3,6 +3,7 @@ package auth
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 )
 
@@ -28,7 +29,9 @@ func TestFileCredentialStore_SaveLoadAndPermissions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("stat: %v", err)
 	}
-	if got := fi.Mode().Perm(); got != 0o600 {
-		t.Fatalf("expected 0600 perms, got %o", got)
+	if runtime.GOOS != "windows" {
+		if got := fi.Mode().Perm(); got != 0o600 {
+			t.Fatalf("expected 0600 perms, got %o", got)
+		}
 	}
 }

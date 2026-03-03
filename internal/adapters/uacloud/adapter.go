@@ -6,8 +6,8 @@ import (
 	"io"
 	"net/http"
 	"net/http/cookiejar"
-    "net/url"
-    "strings"
+	"net/url"
+	"strings"
 	"time"
 
 	"ua-cli/internal/domain/schedule"
@@ -24,22 +24,22 @@ func NewUACloudAdapter(cookieValue string) (*UACloudAdapter, error) {
 		return nil, err
 	}
 
-    // Parse raw cookie string "key=value; key2=value2"
-    baseURLStr := "https://cvnet.cpd.ua.es"
-    u, _ := url.Parse(baseURLStr)
-    
-    var cookies []*http.Cookie
-    rawCookies := strings.Split(cookieValue, ";")
-    for _, raw := range rawCookies {
-        parts := strings.SplitN(strings.TrimSpace(raw), "=", 2)
-        if len(parts) == 2 {
-            cookies = append(cookies, &http.Cookie{
-                Name:  parts[0],
-                Value: parts[1],
-            })
-        }
-    }
-    jar.SetCookies(u, cookies)
+	// Parse raw cookie string "key=value; key2=value2"
+	baseURLStr := "https://cvnet.cpd.ua.es"
+	u, _ := url.Parse(baseURLStr)
+
+	var cookies []*http.Cookie
+	rawCookies := strings.Split(cookieValue, ";")
+	for _, raw := range rawCookies {
+		parts := strings.SplitN(strings.TrimSpace(raw), "=", 2)
+		if len(parts) == 2 {
+			cookies = append(cookies, &http.Cookie{
+				Name:  parts[0],
+				Value: parts[1],
+			})
+		}
+	}
+	jar.SetCookies(u, cookies)
 
 	client := &http.Client{
 		Jar:     jar,

@@ -17,6 +17,7 @@ type UACloudEvent struct {
 	Color     string `json:"color"`
 	ID        string `json:"id"`
 	Rendering string `json:"rendering"`
+	Aula      string `json:"uaIdAula"` // Classroom identifier, e.g. "A3/0007"
 }
 
 // ParseSchedule parses the JSON response from UACloud's ObtenerEventosCalendarioJson.
@@ -43,7 +44,7 @@ func ParseSchedule(data []byte) ([]schedule.Event, error) {
 			Title:    raw.Title,
 			Start:    start,
 			End:      end,
-			Location: "", // UACloud JSON may not include location; we fill it if available
+			Location: raw.Aula, // Classroom identifier from UACloud, e.g. "A3/0007"
 			Type:     eventType,
 		})
 	}

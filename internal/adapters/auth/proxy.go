@@ -27,6 +27,12 @@ var authCookiePrefixes = []string{
 	"ASP.NET_SessionId",
 }
 
+// subAppPaths are UACloud sub-app URLs to visit after initial CAS login
+// so the proxy captures each sub-app's .ASPXFORMSAUTH cookie.
+var subAppPaths = []string{
+	"/uaHorarios",
+}
+
 // ProxyAdapter implements domain/auth.CookieCapturer using a local
 // reverse proxy that intercepts Set-Cookie headers from UACloud/CAS.
 type ProxyAdapter struct {
@@ -52,6 +58,7 @@ func (p *ProxyAdapter) Capture(ctx context.Context) (string, error) {
 	collected := make(map[string]string) // name → "name=value"
 	cookieCh := make(chan string, 1)
 	done := false
+	subAppIdx := 0 // next sub-app to visit
 
 	proxy := &httputil.ReverseProxy{
 		Director: func(req *http.Request) {
@@ -103,9 +110,12 @@ func (p *ProxyAdapter) Capture(ctx context.Context) (string, error) {
 			// (CAS validates it), only the bare host is rewritten.
 			if loc := resp.Header.Get("Location"); loc != "" {
 				newLoc := rewriteURL(loc, p.Port)
-				// Strip gateway=true from CAS redirects so CAS
-				// shows the login form instead of silently bouncing.
-				newLoc = stripGateway(newLoc)
+				// Only strip gateway=true before the initial login.
+				// After that, keep it so CAS does a silent pass-through
+				// for sub-app cookie capture.
+				if !hasASPXFormsAuth(collected) {
+					newLoc = stripGateway(newLoc)
+				}
 				resp.Header.Set("Location", newLoc)
 			}
 
@@ -127,22 +137,33 @@ func (p *ProxyAdapter) Capture(ctx context.Context) (string, error) {
 				}
 			}
 
-			// Signal only when we have at least one .ASPXFORMSAUTH cookie.
+			// Check if we have .ASPXFORMSAUTH cookies.
 			if hasASPXFormsAuth(collected) {
-				done = true
-				var parts []string
-				for _, v := range collected {
-					parts = append(parts, v)
+				// If there are sub-apps still to visit, redirect there
+				// to capture their cookies too.
+				if subAppIdx < len(subAppPaths) {
+					nextPath := subAppPaths[subAppIdx]
+					subAppIdx++
+					resp.Header.Set("Location",
+						fmt.Sprintf("http://localhost:%d%s", p.Port, nextPath))
+					resp.StatusCode = http.StatusFound
+					resp.Status = "302 Found"
+				} else if isLoginComplete(collected) {
+					// All required cookies captured — signal completion.
+					done = true
+					var parts []string
+					for _, v := range collected {
+						parts = append(parts, v)
+					}
+					select {
+					case cookieCh <- strings.Join(parts, "; "):
+					default:
+					}
+					resp.Header.Set("Location",
+						fmt.Sprintf("http://localhost:%d/_ua_login_done", p.Port))
+					resp.StatusCode = http.StatusFound
+					resp.Status = "302 Found"
 				}
-				select {
-				case cookieCh <- strings.Join(parts, "; "):
-				default:
-				}
-				// Redirect browser to success page.
-				resp.Header.Set("Location",
-					fmt.Sprintf("http://localhost:%d/_ua_login_done", p.Port))
-				resp.StatusCode = http.StatusFound
-				resp.Status = "302 Found"
 			}
 			return nil
 		},
@@ -241,4 +262,11 @@ func hasASPXFormsAuth(collected map[string]string) bool {
 		}
 	}
 	return false
+}
+
+// isLoginComplete checks if all required cookies have been captured,
+// including sub-app specific cookies like UAHORARIOS.
+func isLoginComplete(collected map[string]string) bool {
+	_, hasHorarios := collected[".ASPXFORMSAUTHUAHORARIOS"]
+	return hasASPXFormsAuth(collected) && hasHorarios
 }

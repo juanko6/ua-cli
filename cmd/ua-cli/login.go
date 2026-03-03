@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -24,6 +25,7 @@ var (
 	successStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("10")).Bold(true)
 	errorStyle   = lipgloss.NewStyle().Foreground(lipgloss.Color("9")).Bold(true)
 	infoStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("12"))
+	dimStyle     = lipgloss.NewStyle().Foreground(lipgloss.Color("8"))
 )
 
 var loginCmd = &cobra.Command{
@@ -42,10 +44,16 @@ var loginCmd = &cobra.Command{
 			return printSessionStatus(svc)
 		}
 
-		cookie, err := promptCookie(loginManual)
+		var cookie string
+		if loginManual {
+			cookie, err = promptCookieManual()
+		} else {
+			cookie, err = loginViaProxy()
+		}
 		if err != nil {
 			return err
 		}
+
 		if err := svc.StoreCookie(cookie); err != nil {
 			return fmt.Errorf(errorStyle.Render("✗ Login failed:")+" %w", err)
 		}
@@ -65,16 +73,53 @@ func defaultCookiePath() (string, error) {
 	return adaptauth.DefaultCookiePath()
 }
 
-func promptCookie(manual bool) (string, error) {
-	if !manual {
-		fmt.Println(infoStyle.Render("Opening UACloud in your browser..."))
-		if err := adaptauth.OpenInBrowser("https://cvnet.cpd.ua.es/uaCloud"); err != nil {
-			fmt.Fprintf(os.Stderr, "Could not open browser automatically: %v\n", err)
+// loginViaProxy starts a local reverse proxy, opens the browser, and captures
+// authentication cookies automatically after the user completes CAS login.
+func loginViaProxy() (string, error) {
+	proxy := &adaptauth.ProxyAdapter{}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	defer cancel()
+
+	// Start the proxy in the background so we can get the port and open the browser.
+	cookieCh := make(chan string, 1)
+	errCh := make(chan error, 1)
+	go func() {
+		cookie, err := proxy.Capture(ctx)
+		if err != nil {
+			errCh <- err
+			return
 		}
-		fmt.Println(infoStyle.Render("After signing in, copy your Cookie header value and paste it below."))
-	} else {
-		fmt.Println(infoStyle.Render("Manual mode enabled. Paste your UACloud cookie below."))
+		cookieCh <- cookie
+	}()
+
+	// Give the proxy a moment to bind its port.
+	time.Sleep(200 * time.Millisecond)
+
+	proxyURL := proxy.ProxyURL()
+	fmt.Println(infoStyle.Render("🔐 Starting login proxy..."))
+	fmt.Println(infoStyle.Render("Opening UACloud in your browser..."))
+
+	if err := adaptauth.OpenInBrowser(proxyURL); err != nil {
+		fmt.Fprintf(os.Stderr, "%s %v\n",
+			dimStyle.Render("Could not open browser automatically:"), err)
+		fmt.Println(infoStyle.Render("Open this URL manually: ") + proxyURL)
 	}
+
+	fmt.Println(dimStyle.Render("Waiting for CAS login (timeout 2 min)..."))
+
+	select {
+	case cookie := <-cookieCh:
+		return cookie, nil
+	case err := <-errCh:
+		return "", fmt.Errorf(errorStyle.Render("✗ Login failed:")+" %w", err)
+	}
+}
+
+// promptCookieManual asks the user to paste a cookie string manually.
+func promptCookieManual() (string, error) {
+	fmt.Println(infoStyle.Render("Manual mode enabled. Paste your UACloud cookie below."))
+	fmt.Println(dimStyle.Render("(Use this if the automatic browser login doesn't work)"))
 
 	fmt.Print("Cookie (timeout 60s): ")
 	input := make(chan string, 1)

@@ -3,6 +3,7 @@ package auth
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -51,7 +52,7 @@ func (s *AuthService) CheckSession() (*domainauth.Session, error) {
 			session.Path = fs.Path()
 			session.UpdatedAt = fi.ModTime()
 			session.Age = time.Since(fi.ModTime())
-			if fi.Mode().Perm() != 0o600 {
+			if runtime.GOOS != "windows" && fi.Mode().Perm() != 0o600 {
 				session.Status = domainauth.SessionInvalid
 				return session, fmt.Errorf("cookie file permissions are %o (expected 600)", fi.Mode().Perm())
 			}

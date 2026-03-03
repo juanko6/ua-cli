@@ -135,15 +135,22 @@ Extensible a profesorado.
 
 ---
 
-## 7.5 Virtual Campus
+## 7.5 Virtual Campus & Moodle
 
-- Descarga automática de recursos.
-- No organización avanzada.
-- No detección incremental (descarga directa).
+- **Material Docente**: Descarga automática y masiva de recursos.
+- **Entregas (Deadlines)**: Integración con Moodle paralistar próximos trabajos, prácticas y fechas de cierre.
+- Opciones de descarga directa y listado interactivo.
 
 ---
 
-## 7.6 CLI Design
+## 7.6 Tutorías e Interacción
+
+- Enviar solicitudes de tutoría a un profesor rápidamente.
+- Automatizar el flujo de: (Seleccionar asignatura) -> (Seleccionar profesor) -> (Enviar mensaje/solicitud) sin navegar la UI web de UACloud.
+
+---
+
+## 7.7 CLI Design
 
 Ejemplos:
 
@@ -243,14 +250,18 @@ Mitigación:
 - Alertas cambios horario
 - Alertas nuevas notas
 
-## Fase 3 – Campus
-- Descarga automática
-- Mejora parsers resilientes
+## Fase 3 – Campus & Moodle
+- Parseo de fechas de entregas (Assignments)
+- Descarga masiva del material docente
 
-## Fase 4 – Hardening
-- Auto-update
-- Test coverage 80%+
-- CI/CD
+## Fase 4 – Interacción & Tutorías
+- Flujo interactivo para redactar correos/tutorías al profesorado
+- Listado de profesores por asignatura
+
+## Fase 5 – Bots & Notificaciones (Producción Full)
+- Despliegue de bots (Telegram, Discord, WhatsApp)
+- Alertas en tiempo real (push)
+- Hardening & CI/CD avanzado
 
 ---
 
@@ -265,13 +276,17 @@ Mitigación:
 
 ---
 
-# 15. FUTURAS EXTENSIONES
+# 15. FUTURAS EXTENSIONES Y BOTS INTERACTIVOS
 
-- Soporte profesores.
-- Plugins.
-- Exportación ICS.
-- Notificaciones sistema.
-- Modo TUI avanzado.
+El proyecto evolucionará de una mera CLI a un motor de automatización que exponga estas facilidades mediante bots para uso inmediato on-the-go:
+
+- **Plataformas**: Telegram, WhatsApp, Discord, y Slack.
+- **Funcionamiento**: Añadir el bot a un chat, autenticar con un solo comando, y solicitar:
+  - `/horario`
+  - `/entregas_pendientes`
+  - `/avisos`
+- **Tutorías automatizadas**: Notificaciones push integradas cuando el profesor responda.
+- **Profesores**: Soporte futuro para perfil de usuario profesor.
 
 ---
 

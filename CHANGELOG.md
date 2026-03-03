@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-03-03
+
+### Added
+- New `ua login` command with interactive browser-assisted flow.
+- Manual login mode via `ua login --cookie` for headless/SSH usage.
+- Session status check via `ua login --status`.
+- Auth domain and service layers (`Session`, `CredentialStore`, `AuthService`).
+- File credential store with strict `0600` permission enforcement.
+- Cookie validation adapter and cross-platform browser opener.
+- Root command auth middleware (`PersistentPreRunE`) with auth-exempt command list.
+- Basic tests for auth store/service and auth exemption behavior.
+
+### Changed
+- `ua` help/description now includes smart-login behavior.
+- `ua schedule` now relies on shared auth cookie store instead of manual cookie file handling.
+
+### Fixed
+- Edge case: cookie files with incorrect permissions are detected as invalid sessions.
+
 ## [0.2.0] - 2026-02-18
 
 ### Added

@@ -4,16 +4,17 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strings"
+	"path/filepath"
 	"time"
 
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 
+	adaptauth "ua-cli/internal/adapters/auth"
 	"ua-cli/internal/adapters/presenter"
 	"ua-cli/internal/adapters/repo"
 	"ua-cli/internal/adapters/uacloud"
-	"ua-cli/internal/service/schedule"
+	service "ua-cli/internal/service/schedule"
 )
 
 var (
@@ -25,31 +26,32 @@ var (
 var scheduleCmd = &cobra.Command{
 	Use:   "schedule",
 	Short: "View your weekly class schedule",
-    Long: `Displays the schedule for the current week. 
+	Long: `Displays the schedule for the current week.
 Use --next/--prev to navigate weeks.
 Use --json for raw output.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := context.Background()
+		home, _ := os.UserHomeDir()
 
-		// 1. Setup Dependencies
-        // Use user home dir for cache
-        home, _ := os.UserHomeDir()
-        cachePath := fmt.Sprintf("%s/.ua-cli/cache/schedule.json", home)
-
+		cachePath := filepath.Join(home, ".ua-cli", "cache", "schedule.json")
 		repoAdapter, err := repo.NewJSONFileRepo(cachePath)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error initializing cache: %v\n", err)
 			os.Exit(1)
 		}
 
-		// Load cookie from ~/.ua-cli/cookie.txt
-		cookiePath := fmt.Sprintf("%s/.ua-cli/cookie.txt", home)
-		cookieBytes, err := os.ReadFile(cookiePath)
+		cookiePath, err := adaptauth.DefaultCookiePath()
 		if err != nil {
-             // For MVP, just warn and use empty, or fail.
-			fmt.Fprintf(os.Stderr, "Warning: Could not read cookie from %s: %v\n", cookiePath, err)
+			fmt.Fprintf(os.Stderr, "Error resolving cookie path: %v\n", err)
+			os.Exit(1)
 		}
-		cookieVal := strings.TrimSpace(string(cookieBytes))
+		cookieStore := adaptauth.NewFileCredentialStore(cookiePath)
+		cookieVal, err := cookieStore.Load()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error loading cookie: %v\n", err)
+			os.Exit(1)
+		}
+
 		cloudAdapter, err := uacloud.NewUACloudAdapter(cookieVal)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error initializing cloud adapter: %v\n", err)
@@ -58,7 +60,6 @@ Use --json for raw output.`,
 
 		svc := service.NewScheduleService(repoAdapter, cloudAdapter)
 
-		// 2. Calculate Date
 		targetDate := time.Now()
 		if scheduleNextWeek {
 			targetDate = targetDate.AddDate(0, 0, 7)
@@ -66,16 +67,13 @@ Use --json for raw output.`,
 			targetDate = targetDate.AddDate(0, 0, -7)
 		}
 
-		// 3. Execute Service
 		events, err := svc.GetScheduleForWeek(ctx, targetDate, false)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error fetching schedule: %v\n", err)
 			os.Exit(1)
 		}
 
-		// 4. Adaptive UI
-        isTTY := term.IsTerminal(int(os.Stdout.Fd()))
-
+		isTTY := term.IsTerminal(int(os.Stdout.Fd()))
 		if scheduleJSON {
 			presenter.RenderJSON(os.Stdout, events)
 		} else if isTTY {

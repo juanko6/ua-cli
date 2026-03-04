@@ -38,10 +38,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T001 [US1] Create basic Cobra command structure in `cmd/ua-cli/now.go` with service initialization
-- [ ] T002 [US1] Implement schedule filtering and 30-minute threshold sorting logic in `cmd/ua-cli/now.go`
-- [ ] T003 [P] [US1] Implement Lipgloss card UI rendering (`renderNowCard`) in `cmd/ua-cli/now.go`
-- [ ] T004 [P] [US1] Implement JSON output support (`--json`) for automated scripts in `cmd/ua-cli/now.go`
+- [x] T001 [US1] Create basic Cobra command structure in `cmd/ua-cli/now.go` with service initialization
+- [x] T002 [US1] Implement schedule filtering and 30-minute threshold sorting logic in `cmd/ua-cli/now.go`
+- [x] T003 [P] [US1] Implement Lipgloss card UI rendering (`renderNowCard`) in `cmd/ua-cli/now.go`
+- [x] T004 [P] [US1] Implement JSON output support (`--json`) for automated scripts in `cmd/ua-cli/now.go`
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently.
 
@@ -51,9 +51,9 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T005 [P] Run `go fmt ./...` and `go test ./...` to ensure code is clean and passes all existing tests
-- [ ] T006 Verify the feature exactly matches the scenarios in `specs/002-now-command/quickstart.md`
-- [ ] T007 Commit all changes to the `002-now-command` branch
+- [x] T005 [P] Run `go fmt ./...` and `go test ./...` to ensure code is clean and passes all existing tests
+- [x] T006 Verify the feature exactly matches the scenarios in `specs/002-now-command/quickstart.md`
+- [x] T007 Commit all changes to the `002-now-command` branch
 
 ---
 

@@ -2,8 +2,8 @@ package presenter
 
 import (
 	"fmt"
-    "os"
-    
+	"os"
+
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -16,8 +16,8 @@ var baseStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("240"))
 
 type model struct {
-	table table.Model
-    events []schedule.Event
+	table  table.Model
+	events []schedule.Event
 }
 
 func (m model) Init() tea.Cmd { return nil }
@@ -37,7 +37,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "enter":
 			// Detail view could go here
-            // return m, tea.Batch(
+			// return m, tea.Batch(
 			// 	tea.Printf("Selected: %s", m.table.SelectedRow()[1]),
 			// )
 		}
@@ -61,13 +61,13 @@ func RenderTUI(events []schedule.Event) {
 	}
 
 	rows := []table.Row{}
-    for _, e := range events {
-        day := e.Start.Weekday().String()[0:3]
+	for _, e := range events {
+		day := e.Start.Weekday().String()[0:3]
 		timeRange := fmt.Sprintf("%s-%s", e.Start.Format("15:04"), e.End.Format("15:04"))
-        rows = append(rows, table.Row{
-             day, timeRange, e.Title, e.Location, string(e.Type), 
-        })
-    }
+		rows = append(rows, table.Row{
+			day, timeRange, e.Title, e.Location, string(e.Type),
+		})
+	}
 
 	t := table.New(
 		table.WithColumns(columns),

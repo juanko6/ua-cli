@@ -11,5 +11,9 @@ import (
 func RenderJSON(w io.Writer, events []schedule.Event) {
 	enc := json.NewEncoder(w)
 	enc.SetIndent("", "  ")
-	enc.Encode(events)
+	if err := enc.Encode(events); err != nil {
+		// En presenter no solemos loguear errores fatales si es stdout, pero
+		// al menos documentamos o ignoramos explícitamente el return.
+		_ = err
+	}
 }

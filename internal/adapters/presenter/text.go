@@ -5,7 +5,6 @@ import (
 	"io"
 	"text/tabwriter"
 
-
 	"ua-cli/internal/domain/schedule"
 )
 
@@ -18,11 +17,11 @@ func RenderTextTable(w io.Writer, events []schedule.Event) {
 
 	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
 	fmt.Fprintln(tw, "DAY\tTIME\tSUBJECT\tLOCATION\tTYPE")
-	
+
 	for _, e := range events {
 		day := e.Start.Weekday().String()[0:3]
 		timeRange := fmt.Sprintf("%s-%s", e.Start.Format("15:04"), e.End.Format("15:04"))
-        // Basic shortening of title might be needed
+		// Basic shortening of title might be needed
 		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\t%s\n", day, timeRange, e.Title, e.Location, e.Type)
 	}
 	tw.Flush()

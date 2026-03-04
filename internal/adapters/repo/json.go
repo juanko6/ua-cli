@@ -41,10 +41,10 @@ func (r *JSONFileRepo) GetWeekEvents(ctx context.Context, date time.Time) ([]sch
 	if err := json.NewDecoder(file).Decode(&cached); err != nil {
 		return nil, err
 	}
-    
-    // Check TTL here if we wanted to enforce strictly in repo, 
-    // but Service handles logic usually. 
-    // We just return what we have.
+
+	// Check TTL here if we wanted to enforce strictly in repo,
+	// but Service handles logic usually.
+	// We just return what we have.
 	return cached.Events, nil
 }
 

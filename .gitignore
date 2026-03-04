@@ -26,5 +26,5 @@ last_response.txt
 # Ignore temporary spec scripts outputs if any.
 
 # Go
-go.sum
+# go.sum is required for reproducible builds
 vendor/

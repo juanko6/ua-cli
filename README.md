@@ -93,9 +93,24 @@ El proyecto está diseñado bajo los principios arquitectónicos de *Ports & Ada
 ## 🤝 Roadmap / Futuro
 
 Consulta el [Product Requirements Document (PRD)](prd.md) completo de este repositorio. Las funcionalidades siguientes en la mira son:
-*   [ ] Comando `ua grades` (consulta de notas interactivas).
-*   [ ] Exportación `.ics` (Importar UACloud a Google Calendar/Apple Calendar nativamente).
-*   [ ] Comando `ua notices` (Avisos del campus y cambios de aula recientes).
+
+*   [ ] **Moodle Integration (Deadlines):** Revisar fechas de entrega de trabajos en tu terminal.
+*   [ ] **Material Docente:** Descargar de forma rápida (batch) apuntes y archivos de tus asignaturas.
+*   [ ] **Tutorías automatizadas:** Flujo wizard para enviar tutorías rápidas a profesores sin tener que navegar por tantos menús de la web.
+*   [ ] **Chatbot Multi-plataforma:** Extender el uso de `ua-cli` nativamente para enviarle comandos vía Telegram, WhatsApp, Slack o Discord.
+
+## 📐 Specification-Driven Development (SDD) con Speckit
+
+El ciclo de desarrollo de **`ua-cli`** no se hace escribiendo código directamente, sino que seguimos un modelo riguroso de diseño llamado *"Spec-Driven Development"* (SDD). Usamos los flujos de trabajo locales de la carpeta `.agent/workflows/` (Speckit) para planificar, validar e implementar funciones.
+
+Si vas a proponer o crear una funcionalidad nueva, el ciclo de vida estricto es el siguiente:
+
+1. **`@/speckit.specify`**: A partir de lenguaje natural y el PRD, se genera el documento formal de especificación `spec.md` detallando historias de usuario, requerimientos funcionales y una checklist de éxito en la carpeta de la nueva feature.
+2. **`@/speckit.plan`**: Creamos los documentos técnicos (`plan.md`, `research.md`, y de modelo de datos `data-model.md`). El sistema propone cómo integrarlo en la arquitectura hexagonal del código de Go sin romper nada y con validación técnica.
+3. **`@/speckit.tasks`**: Partiendo del conocimiento y el diseño anterior, se genera de forma exacta la subdivisión del listado de tareas atómicas interconectadas en el documento `tasks.md`.
+4. **`@/speckit.implement`**: Arrancamos el motor para codificar tarea por tarea utilizando un enfoque estructurado (TDD si aplica), pasando por los pasos de infraestructura, funcionalidad base y acabados estéticos con `lipgloss` hasta el último paso del Pipeline CI/CD.
+
+Siéntete libre de navegar a la carpeta `specs/` para ver los ejemplos exactos del diseño previo al código.
 
 ## ⚠️ Disclaimer Legal
 

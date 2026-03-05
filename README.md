@@ -94,10 +94,11 @@ El proyecto está diseñado bajo los principios arquitectónicos de *Ports & Ada
 
 Consulta el [Product Requirements Document (PRD)](prd.md) completo de este repositorio. Las funcionalidades siguientes en la mira son:
 
-*   [ ] **Moodle Integration (Deadlines):** Revisar fechas de entrega de trabajos en tu terminal.
-*   [ ] **Material Docente:** Descargar de forma rápida (batch) apuntes y archivos de tus asignaturas.
-*   [ ] **Tutorías automatizadas:** Flujo wizard para enviar tutorías rápidas a profesores sin tener que navegar por tantos menús de la web.
-*   [ ] **Chatbot Multi-plataforma:** Extender el uso de `ua-cli` nativamente para enviarle comandos vía Telegram, WhatsApp, Slack o Discord.
+*   **Fase 1 (Core):** Login persistente (`ua login`), Horario semanal (`ua schedule`), y la clase actual (`ua now`).
+*   **Fase 2 (Notificaciones):** Comando general para avisos del campus y cambios de aula (`ua notices`). Consulta de notas interactivas (`ua grades`).
+*   **Fase 3 (Campus & Moodle):** Integración de Moodle para fechas de entregas (Deadlines) y descarga masiva de Material Docente.
+*   **Fase 4 (Interacción & Tutorías):** Flujo y wizard integrado en terminal para enviar consultas de tutorías a profesores automatizadamente.
+*   **Fase 5 (Bots & Notificaciones):** Despliegue de la API y comandos como un Chatbot nativo cross-platform (Telegram, Discord, WhatsApp).
 
 ## 📐 Specification-Driven Development (SDD) con Speckit
 

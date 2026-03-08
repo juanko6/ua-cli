@@ -11,10 +11,12 @@
 
 ---
 
-## 🚀 Características (v0.3.x)
+## 🚀 Características (v0.4.x)
 
 *   **🔑 Smart Auto-Login (CAS SSO):** `ua login` levanta un proxy local, abre tu navegador al portal de la universidad y captura transparente y automáticamente las cookies de sesión (sin copiar y pegar).
 *   **📅 Horario Interactivo (TUI):** `ua schedule` recupera y parsea tu horario semanal real, mostrando asignaturas, horarios y **localidad de aula** (p.e. `A3/0007`) usando una interfaz interactiva de terminal o formato de tabla Unix.
+*   **🎯 Próxima Clase Instantánea:** `ua now` muestra tu clase actual o próxima inmediata con reglas inteligentes (cambia a próxima clase cuando faltan 30 min).
+*   **📊 Calificaciones Inteligentes:** `ua grades` muestra tus notas actuales, detecta nuevas calificaciones y resalta cambios automáticamente.
 *   **⚡ Ultra-rápido:** Tiempo de consulta sub-segundo garantizado.
 *   **🛡️ Arquitectura Segura:** Las sesiones (cookies) se almacenan localmente y encriptadas por el sistema operativo. Arquitectura hexagonal clara con tests rigurosos.
 *   **JSON API Ready:** Salida compatible con JSON (`--json`) para construir pipelines y automatizar flujos.
@@ -72,6 +74,36 @@ ua schedule --prev
 ua schedule --json
 ```
 
+### 3. Consultar Clase Actual/Próxima
+
+```bash
+# Ver tu clase actual o próxima inmediata
+ua now
+
+# Automaticamente detecta:
+# - Clase actual si hay +30 min restantes
+# - Próxima clase si hay <30 min en la actual
+# - Mensaje de descanso si no hay más clases
+```
+
+### 4. Consultar Calificaciones
+
+```bash
+# Ver todas tus calificaciones actuales
+ua grades
+
+# Filtrar por estado
+ua grades --approved    # Solo aprobadas
+ua grades --pending     # Solo pendientes
+ua grades --attention   # Requieren atención
+
+# Output en JSON para automatización
+ua grades --json
+
+# Detecta automáticamente nuevas calificaciones
+# desde tu última consulta y las resalta con 🆕
+```
+
 ## 🏗️ Estructura del Proyecto (Arquitectura Hexagonal)
 
 El proyecto está diseñado bajo los principios arquitectónicos de *Ports & Adapters*:
@@ -79,7 +111,7 @@ El proyecto está diseñado bajo los principios arquitectónicos de *Ports & Ada
 ```text
 ├── cmd/ua-cli/               # Punto de entrada de la aplicación CLI (Cobra config)
 ├── internal/
-│   ├── domain/               # Entidades de negocio (Schedule, Auth)
+│   ├── domain/               # Entidades de negocio (Schedule, Auth, Grades)
 │   ├── service/              # Casos de uso de la aplicación principal
 │   └── adapters/             # Implementaciones concretas de puertos:
 │       ├── auth/             #   Proxy local, CAS login form handler y storage

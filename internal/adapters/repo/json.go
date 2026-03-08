@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"ua-cli/internal/domain/schedule"
+	"github.com/juanko6/ua-cli/internal/domain/schedule"
 )
 
 type JSONFileRepo struct {

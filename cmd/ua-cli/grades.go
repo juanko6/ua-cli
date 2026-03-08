@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/juanko6/ua-cli/internal/adapters/presenter/grades"
 	"github.com/juanko6/ua-cli/internal/adapters/repo"

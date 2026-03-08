@@ -95,10 +95,10 @@ func (r *UACloudGradesRepository) DetectNewGrades(current []grades.Grade) ([]gra
 		return current, nil
 	}
 
-	var newGrades []Grade
+	var newGrades []grades.Grade
 	
 	// Create lookup map for previous grades
-	previousMap := make(map[string]Grade)
+	previousMap := make(map[string]grades.Grade)
 	for _, grade := range r.grades {
 		previousMap[grade.SubjectID] = grade
 	}

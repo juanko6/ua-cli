@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	adaptauth "ua-cli/internal/adapters/auth"
-	domainauth "ua-cli/internal/domain/auth"
-	authservice "ua-cli/internal/service/auth"
+	adaptauth "github.com/juanko6/ua-cli/internal/adapters/auth"
+	domainauth "github.com/juanko6/ua-cli/internal/domain/auth"
+	authservice "github.com/juanko6/ua-cli/internal/service/auth"
 )
 
 var rootCmd = &cobra.Command{

@@ -3,46 +3,41 @@ package grades
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 )
 
 // GradesService handles the business logic for grades operations
 type GradesService struct {
-	repo      GradesRepository
-	tracker   *GradeTracker
-	presenter GradesPresenter
+	repo      Repository
+	tracker   *Tracker
+	presenter Presenter
 }
 
-// GradesOptions defines the options for fetching and presenting grades
-type GradesOptions struct {
-	JSONOutput    bool     `json:"json_output"`
-	ShowApproved  bool     `json:"show_approved"`
-	ShowPending   bool     `json:"show_pending"`
-	ShowAttention bool     `json:"show_attention"`
+// Repository defines the interface for grade data operations
+type Repository interface {
+	// FetchGrades retrieves all grades for the current user
+	FetchGrades(ctx context.Context, session interface{}) ([]Grade, error)
+	
+	// GetLastCheck returns the timestamp of the last grade check
+	GetLastCheck() (time.Time, error)
+	
+	// SetLastCheck updates the timestamp of the last grade check
+	SetLastCheck(checkTime time.Time) error
+	
+	// DetectNewGrades compares current grades with previous ones and returns new grades
+	DetectNewGrades(current []Grade) ([]Grade, error)
 }
 
-// GradesResult contains the result of a grades operation
-type GradesResult struct {
-	Grades         []Grade    `json:"grades"`
-	NewGrades      []Grade    `json:"new_grades"`
-	LastCheck      time.Time  `json:"last_check"`
-	TotalSubjects  int        `json:"total_subjects"`
-	AverageGrade   float64    `json:"average_grade"`
-	HasChanges     bool       `json:"has_changes"`
-	Message        string     `json:"message"`
-}
-
-// GradesPresenter defines the interface for presenting grades data
-type GradesPresenter interface {
+// Presenter defines the interface for presenting grades data
+type Presenter interface {
 	Present(result *GradesResult) string
 }
 
 // NewGradesService creates a new grades service
 func NewGradesService(
-	repo GradesRepository,
-	tracker *GradeTracker,
-	presenter GradesPresenter,
+	repo Repository,
+	tracker *Tracker,
+	presenter Presenter,
 ) *GradesService {
 	return &GradesService{
 		repo:      repo,
@@ -52,7 +47,7 @@ func NewGradesService(
 }
 
 // GetGrades fetches and presents grades based on the provided options
-func (s *GradesService) GetGrades(ctx context.Context, session interface{}, opts GradesOptions) (*GradesResult, error) {
+func (s *GradesService) GetGrades(ctx context.Context, session interface{}, opts *GradesOptions) (*GradesResult, error) {
 	// Fetch all grades
 	grades, err := s.repo.FetchGrades(ctx, session)
 	if err != nil {
@@ -104,8 +99,8 @@ func (s *GradesService) DetectNewGrades(ctx context.Context, session interface{}
 }
 
 // filterGrades filters grades based on the provided options
-func (s *GradesService) filterGrades(grades []Grade, opts GradesOptions) []Grade {
-	if !opts.ShowApproved && !opts.ShowPending && !opts.ShowAttention {
+func (s *GradesService) filterGrades(grades []Grade, opts *GradesOptions) []Grade {
+	if opts == nil || (!opts.ShowApproved && !opts.ShowPending && !opts.ShowAttention) {
 		// Show all if no filters specified
 		return grades
 	}
@@ -146,8 +141,8 @@ func (s *GradesService) calculateAverage(grades []Grade) float64 {
 }
 
 // generateMessage generates an appropriate message based on the results
-func (s *GradesService) generateMessage(result *GradesResult, opts GradesOptions) string {
-	if opts.JSONOutput {
+func (s *GradesService) generateMessage(result *GradesResult, opts *GradesOptions) string {
+	if opts != nil && opts.JSONOutput {
 		return ""
 	}
 

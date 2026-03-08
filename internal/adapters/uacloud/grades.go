@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/cookiejar"
-	"net/url"
-	"strings"
 	"time"
 
 	"github.com/juanko6/ua-cli/internal/domain/grades"

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"ua-cli/internal/domain/schedule"
+	"github.com/juanko6/ua-cli/internal/domain/schedule"
 )
 
 // UACloudEvent represents the raw JSON event from the UACloud API (FullCalendar format).

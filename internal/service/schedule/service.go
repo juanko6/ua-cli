@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"ua-cli/internal/domain/schedule"
+	"github.com/juanko6/ua-cli/internal/domain/schedule"
 )
 
 // ScheduleService orchestrates the retrieval of schedule events.

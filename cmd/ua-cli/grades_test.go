@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/spf13/pflag"
 	"github.com/juanko6/ua-cli/internal/domain/grades"
 )
 
@@ -28,12 +29,11 @@ func TestGradesCommandStructure(t *testing.T) {
 	
 	t.Run("has_json_flag", func(t *testing.T) {
 		found := false
-		for _, flag := range gradesCmd.LocalFlags().FlagNames() {
-			if flag == "json" || flag == "j" {
+		gradesCmd.LocalFlags().VisitAll(func(flag *pflag.Flag) {
+			if flag.Name == "json" || flag.Shorthand == "j" {
 				found = true
-				break
 			}
-		}
+		})
 		if !found {
 			t.Error("json flag not found")
 		}
@@ -43,12 +43,11 @@ func TestGradesCommandStructure(t *testing.T) {
 		requiredFlags := []string{"approved", "pending", "attention"}
 		for _, flagName := range requiredFlags {
 			found := false
-			for _, flag := range gradesCmd.LocalFlags().FlagNames() {
-				if flag == flagName {
+			gradesCmd.LocalFlags().VisitAll(func(flag *pflag.Flag) {
+				if flag.Name == flagName {
 					found = true
-					break
 				}
-			}
+			})
 			if !found {
 				t.Errorf("%s flag not found", flagName)
 			}

@@ -8,7 +8,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"ua-cli/internal/domain/schedule"
+	"github.com/juanko6/ua-cli/internal/domain/schedule"
 )
 
 var baseStyle = lipgloss.NewStyle().

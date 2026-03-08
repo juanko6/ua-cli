@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	adaptauth "ua-cli/internal/adapters/auth"
-	domainauth "ua-cli/internal/domain/auth"
+	adaptauth "github.com/juanko6/ua-cli/internal/adapters/auth"
+	domainauth "github.com/juanko6/ua-cli/internal/domain/auth"
 )
 
 const (

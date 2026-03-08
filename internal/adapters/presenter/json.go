@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io"
 
-	"ua-cli/internal/domain/schedule"
+	"github.com/juanko6/ua-cli/internal/domain/schedule"
 )
 
 // RenderJSON prints events as raw JSON.

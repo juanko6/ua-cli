@@ -5,7 +5,7 @@ import (
 	"io"
 	"text/tabwriter"
 
-	"ua-cli/internal/domain/schedule"
+	"github.com/juanko6/ua-cli/internal/domain/schedule"
 )
 
 // RenderTextTable prints events in a tabular format compatible with grep/awk.

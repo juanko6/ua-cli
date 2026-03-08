@@ -10,11 +10,11 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 
-	adaptauth "ua-cli/internal/adapters/auth"
-	"ua-cli/internal/adapters/presenter"
-	"ua-cli/internal/adapters/repo"
-	"ua-cli/internal/adapters/uacloud"
-	service "ua-cli/internal/service/schedule"
+	adaptauth "github.com/juanko6/ua-cli/internal/adapters/auth"
+	"github.com/juanko6/ua-cli/internal/adapters/presenter"
+	"github.com/juanko6/ua-cli/internal/adapters/repo"
+	"github.com/juanko6/ua-cli/internal/adapters/uacloud"
+	service "github.com/juanko6/ua-cli/internal/service/schedule"
 )
 
 var (

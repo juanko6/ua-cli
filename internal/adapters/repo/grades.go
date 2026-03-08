@@ -19,14 +19,14 @@ type UACloudGradesRepository struct {
 	mu         sync.RWMutex
 	grades     []grades.Grade
 	lastCheck  time.Time
-	storagePath string
+	StoragePath string
 	adapter    *UACloudGradesAdapter
 }
 
 // NewUACloudGradesRepository creates a new UACloud grades repository
 func NewUACloudGradesRepository(storagePath string, adapter *UACloudGradesAdapter) *UACloudGradesRepository {
 	repo := &UACloudGradesRepository{
-		storagePath: storagePath,
+		StoragePath: storagePath,
 		adapter:    adapter,
 	}
 	
@@ -132,7 +132,7 @@ func (r *UACloudGradesRepository) save() error {
 	defer r.mu.RUnlock()
 
 	// Create storage directory if it doesn't exist
-	if err := os.MkdirAll(filepath.Dir(r.storagePath), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(r.StoragePath), 0755); err != nil {
 		return fmt.Errorf("failed to create storage directory: %w", err)
 	}
 
@@ -152,7 +152,7 @@ func (r *UACloudGradesRepository) save() error {
 	}
 
 	// Write to file
-	if err := os.WriteFile(r.storagePath, jsonData, 0600); err != nil {
+	if err := os.WriteFile(r.StoragePath, jsonData, 0600); err != nil {
 		return fmt.Errorf("failed to write grades file: %w", err)
 	}
 
@@ -162,13 +162,13 @@ func (r *UACloudGradesRepository) save() error {
 // load loads grades from storage
 func (r *UACloudGradesRepository) load() error {
 	// Check if storage file exists
-	if _, err := os.Stat(r.storagePath); os.IsNotExist(err) {
+	if _, err := os.Stat(r.StoragePath); os.IsNotExist(err) {
 		// File doesn't exist, that's okay
 		return nil
 	}
 
 	// Read file
-	data, err := os.ReadFile(r.storagePath)
+	data, err := os.ReadFile(r.StoragePath)
 	if err != nil {
 		return fmt.Errorf("failed to read grades file: %w", err)
 	}
@@ -201,7 +201,7 @@ func (r *UACloudGradesRepository) ClearCache() error {
 	r.lastCheck = time.Time{}
 
 	// Remove storage file
-	if err := os.Remove(r.storagePath); err != nil && !os.IsNotExist(err) {
+	if err := os.Remove(r.StoragePath); err != nil && !os.IsNotExist(err) {
 		return fmt.Errorf("failed to remove grades file: %w", err)
 	}
 

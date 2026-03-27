@@ -1,0 +1,81 @@
+name: 🐛 Bug Report
+description: Reporta un bug o error que hayas encontrado en ua-cli.
+title: "[bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por tomarte el tiempo de reportar un bug. Por favor, rellena los campos siguientes con la mayor cantidad de detalles posibles.
+  
+  - type: input
+    id: version
+    attributes:
+      label: Versión de ua-cli
+      description: ¿Cuál es la versión del CLI que estás usando? (`ua --version`)
+      placeholder: "v0.3.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Sistema Operativo
+      options:
+        - Windows
+        - macOS
+        - Linux (Ubuntu/Debian)
+        - Linux (Arch/Manjaro)
+        - Linux (otro)
+        - Otro
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 🐛 Describe el bug
+      description: Una descripción clara y concisa de qué ocurre.
+      placeholder: "Al ejecutar `ua schedule` me aparece el error..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 📋 Pasos para reproducirlo
+      description: Pasos exactos para reproducir el comportamiento.
+      placeholder: |
+        1. Ejecutar `ua login`
+        2. Ejecutar `ua schedule`
+        3. Ver el error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ Comportamiento esperado
+      description: ¿Qué esperabas que ocurriera?
+      placeholder: "Debería mostrarse el horario de la semana actual."
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: 📄 Salida del error / Logs
+      description: Pega la salida completa del error o screenshot aquí. (**No incluyas cookies ni datos personales**).
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: He buscado si existe un Issue similar antes de crearlo.
+          required: true
+        - label: He verificado que el problema ocurre con la versión más reciente de ua-cli.
+          required: false

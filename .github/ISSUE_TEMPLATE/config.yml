@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discusión General
+    url: https://github.com/juanko6/ua-cli/discussions
+    about: Para preguntas generales o ideas que no encajan en los templates anteriores, usa Discussions.
+  - name: 📚 Documentación
+    url: https://github.com/juanko6/ua-cli/blob/main/CONTRIBUTING.md
+    about: Lee la guía de contribución antes de abrir un Issue.

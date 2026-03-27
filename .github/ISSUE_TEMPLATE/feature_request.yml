@@ -1,0 +1,68 @@
+name: ✨ Feature Request
+description: Propón una nueva idea o mejora para ua-cli.
+title: "[feat]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por proponer una mejora! Por favor, recuerda que toda nueva feature pasa por el ciclo de **Specification-Driven Development (SDD)** antes de ser implementada. Si quieres contribuir con código, consulta el [CONTRIBUTING.md](../../CONTRIBUTING.md).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 🎯 ¿Qué problema resuelve?
+      description: Describe el problema o la necesidad que motiva esta feature.
+      placeholder: "Siempre tengo que entrar a la web de UACloud para ver mis notas. Sería ideal poder verlas desde el terminal..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 💡 Solución propuesta
+      description: Describe la solución que te gustaría ver implementada.
+      placeholder: |
+        Un comando `ua grades` que muestre mis notas actuales ordenadas por asignatura.
+        Ejemplo de salida esperada:
+        $ ua grades
+        Estructura de Computadores   8.5
+        Matemáticas II               7.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 🔄 Alternativas consideradas
+      description: ¿Has considerado otras soluciones o alternativas?
+      placeholder: "Podría exportar el JSON de notas para procesar con `jq`, pero sería más cómodo integrado en el CLI."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: phase
+    attributes:
+      label: 🗺️ Fase del Roadmap
+      description: ¿Con qué fase del roadmap se alinea esta feature?
+      options:
+        - "Fase 1 (Core)"
+        - "Fase 2 (Notificaciones)"
+        - "Fase 3 (Campus & Moodle)"
+        - "Fase 4 (Interacción & Tutorías)"
+        - "Fase 5 (Bots & Notificaciones)"
+        - "No está en el roadmap actual"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: He buscado si existe un Issue o PR similar ya creado.
+          required: true
+        - label: He leído el [PRD](../../prd.md) y esta feature está alineada con la visión del proyecto.
+          required: false
+        - label: Estoy dispuesto a contribuir con código siguiendo el ciclo SDD (speckit).
+          required: false
